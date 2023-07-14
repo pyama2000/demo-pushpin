@@ -1,8 +1,13 @@
-use axum::{http::StatusCode, routing::get};
+use axum::{
+    http::{HeaderMap, StatusCode},
+    routing::get,
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let app = axum::Router::new().route("/healthz", get(|| async { StatusCode::OK }));
+    let app = axum::Router::new()
+        .route("/healthz", get(|| async { StatusCode::OK }))
+        .route("/stream", get(stream));
 
     let port = std::env::var("REPLACE_MOCK_BACKEND_PORT")
         .unwrap_or_else(|_| panic!("REPLACE_MOCK_BACKEND_PORT must be set"));
@@ -13,6 +18,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await?;
 
     Ok(())
+}
+
+/// Tell Grip Proxy (like Pushpin) to hold the HTTP connection open
+async fn stream() -> HeaderMap {
+    let mut headers = HeaderMap::new();
+    headers.insert("Content-Type", "text/event-stream".parse().unwrap());
+    headers.insert("Grip-Hold", "stream".parse().unwrap());
+    headers.insert("Grip-Channel", "test".parse().unwrap());
+    headers
 }
 
 async fn shutdown_signal() {
