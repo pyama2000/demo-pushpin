@@ -1,0 +1,7 @@
+services:
+  grip-proxy:
+    image: fanout/pushpin:1.33.1
+    platform: linux/amd64
+    ports:
+      - "7999:7999"
+      - "5561:5561"
