@@ -1,7 +1,18 @@
 services:
+  replace-mock-backend:
+    container_name: replace-mock-backend
+    build:
+      context: ./replace-mock-backend/.
+      dockerfile: ./build/docker/Dockerfile
+    environment:
+      - REPLACE_MOCK_BACKEND_PORT
+    ports:
+      - "${REPLACE_MOCK_BACKEND_PORT}"
   grip-proxy:
     image: fanout/pushpin:1.33.1
     platform: linux/amd64
+    volumes:
+      - ./pushpin:/etc/pushpin
     ports:
       - "7999:7999"
       - "5561:5561"
