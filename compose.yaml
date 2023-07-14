@@ -6,13 +6,16 @@ services:
       dockerfile: ./build/docker/Dockerfile
     environment:
       - REPLACE_MOCK_BACKEND_PORT
+      - GRIP_PROXY_HOST_NAME
+      - GRIP_PROXY_PUBLISH_PORT
     ports:
       - "${REPLACE_MOCK_BACKEND_PORT}"
   grip-proxy:
+    container_name: grip-proxy
     image: fanout/pushpin:1.33.1
     platform: linux/amd64
     volumes:
       - ./pushpin:/etc/pushpin
     ports:
       - "7999:7999"
-      - "5561:5561"
+      - "${GRIP_PROXY_PUBLISH_PORT}:5561"
