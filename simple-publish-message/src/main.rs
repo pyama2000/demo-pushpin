@@ -55,8 +55,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/stream", get(stream))
         .route("/publish", post(publish));
 
-    let port = std::env::var("REPLACE_MOCK_BACKEND_PORT")
-        .unwrap_or_else(|_| panic!("REPLACE_MOCK_BACKEND_PORT must be set"));
+    let port = std::env::var("APPLICATION_PORT")
+        .unwrap_or_else(|_| panic!("APPLICATION_PORT must be set"));
     let addr = format!("0.0.0.0:{}", port).parse()?;
     axum::Server::bind(&addr)
         .serve(app.into_make_service())

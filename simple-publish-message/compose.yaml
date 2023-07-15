@@ -1,15 +1,15 @@
 services:
-  replace-mock-backend:
-    container_name: replace-mock-backend
+  backend:
+    container_name: backend
     build:
       context: .
       dockerfile: ./build/docker/Dockerfile
     environment:
-      - REPLACE_MOCK_BACKEND_PORT
+      - APPLICATION_PORT
       - GRIP_PROXY_HOST_NAME
       - GRIP_PROXY_PUBLISH_PORT
     ports:
-      - "${REPLACE_MOCK_BACKEND_PORT}"
+      - "${APPLICATION_PORT}"
   grip-proxy:
     container_name: grip-proxy
     image: fanout/pushpin:1.33.1
