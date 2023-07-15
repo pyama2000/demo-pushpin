@@ -2,7 +2,7 @@ services:
   replace-mock-backend:
     container_name: replace-mock-backend
     build:
-      context: ./replace-mock-backend/.
+      context: .
       dockerfile: ./build/docker/Dockerfile
     environment:
       - REPLACE_MOCK_BACKEND_PORT
