@@ -50,6 +50,8 @@ impl GripPublishFormat {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    tracing_subscriber::fmt::init();
+
     let app = axum::Router::new()
         .route("/healthz", get(|| async { StatusCode::OK }))
         .route("/stream", get(stream))
@@ -58,6 +60,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let port = std::env::var("APPLICATION_PORT")
         .unwrap_or_else(|_| panic!("APPLICATION_PORT must be set"));
     let addr = format!("0.0.0.0:{}", port).parse()?;
+
+    tracing::info!("listening on: {}", &addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .with_graceful_shutdown(shutdown_signal())
@@ -114,7 +118,9 @@ async fn shutdown_signal() {
     let terminate = std::future::pending::<()>();
 
     tokio::select! {
-        _ = ctrl_c => {},
-        _ = terminate => {},
+        _ = ctrl_c => tracing::debug!("receive ctrl_c signal"),
+        _ = terminate => tracing::debug!("receive terminate"),
     }
+
+    tracing::info!("signal received, starting graceful shutdown");
 }
