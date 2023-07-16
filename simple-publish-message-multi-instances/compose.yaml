@@ -1,4 +1,10 @@
 services:
+  load-balancer:
+    image: nginx:1.25
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8080:80"
   grip-proxy-1:
     container_name: grip-proxy-1
     image: fanout/pushpin:1.33.1
