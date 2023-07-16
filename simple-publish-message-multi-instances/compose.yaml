@@ -1,0 +1,28 @@
+services:
+  grip-proxy-1:
+    container_name: grip-proxy-1
+    image: fanout/pushpin:1.33.1
+    platform: linux/amd64
+    volumes:
+      - ./pushpin:/etc/pushpin
+    ports:
+      - "7999"
+      - "$GRIP_PROXY_PUBLISH_PORT"
+  grip-proxy-2:
+    container_name: grip-proxy-2
+    image: fanout/pushpin:1.33.1
+    platform: linux/amd64
+    volumes:
+      - ./pushpin:/etc/pushpin
+    ports:
+      - "7999"
+      - "$GRIP_PROXY_PUBLISH_PORT"
+  grip-proxy-3:
+    container_name: grip-proxy-3
+    image: fanout/pushpin:1.33.1
+    platform: linux/amd64
+    volumes:
+      - ./pushpin:/etc/pushpin
+    ports:
+      - "7999"
+      - "$GRIP_PROXY_PUBLISH_PORT"
