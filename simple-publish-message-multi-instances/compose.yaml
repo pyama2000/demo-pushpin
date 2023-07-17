@@ -1,4 +1,15 @@
 services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: ./build/docker/Dockerfile
+    environment:
+      - APPLICATION_PORT
+      - GRIP_PROXY_HOSTS
+      - GRIP_PROXY_PUBLISH_PORT
+    ports:
+      - "$APPLICATION_PORT"
   load-balancer:
     image: nginx:1.25
     volumes:
