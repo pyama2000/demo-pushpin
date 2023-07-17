@@ -8,7 +8,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
     let config = config::Config::from_env();
-    let app = axum::Router::new().route("/healthz", get(handler::healthz));
+    let app = axum::Router::new()
+        .route("/healthz", get(handler::healthz))
+        .route("/stream", get(handler::subscribe::stream));
 
     let addr = format!("0.0.0.0:{}", &config.port).parse()?;
 
