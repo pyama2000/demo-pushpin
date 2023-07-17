@@ -1,16 +1,22 @@
-use axum::routing::get;
+use std::sync::Arc;
+
+use axum::routing::{get, post};
 
 mod config;
 mod handler;
+
+const CHANNEL_NAME: &str = "test";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
-    let config = config::Config::from_env();
+    let config = Arc::new(config::Config::from_env());
     let app = axum::Router::new()
         .route("/healthz", get(handler::healthz))
-        .route("/stream", get(handler::subscribe::stream));
+        .route("/stream", get(handler::subscribe::stream))
+        .route("/publish", post(handler::publish::publish))
+        .with_state(config.clone());
 
     let addr = format!("0.0.0.0:{}", &config.port).parse()?;
 

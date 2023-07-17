@@ -1,6 +1,6 @@
 use axum::http::HeaderMap;
 
-const CHANNEL_NAME: &str = "test";
+use crate::CHANNEL_NAME;
 
 /// Tell Grip Proxy (like Pushpin) to hold the HTTP connection open
 pub async fn stream() -> HeaderMap {
